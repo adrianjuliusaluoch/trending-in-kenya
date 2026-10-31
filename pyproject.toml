@@ -1,0 +1,21 @@
+[project]
+name = "trends-pipeline"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "pyarrow",
+    "boto3",
+    "python-dotenv",
+    "duckdb>=2.0",
+    "serpapi",
+    "google-api-python-client",
+    "isodate",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

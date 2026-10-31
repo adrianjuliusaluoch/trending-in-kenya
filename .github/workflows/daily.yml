@@ -1,0 +1,33 @@
+name: Trends Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      hours:
+        description: "Trends window in hours (24 normal, 168 backfill)"
+        default: "24"
+
+concurrency:
+  group: searches-lakehouse
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - run: python -m trends_pipeline.run
+        env:
+          TRENDS_HOURS: ${{ inputs.hours || '24' }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+          B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
+          B2_APP_KEY: ${{ secrets.B2_APP_KEY }}
+          B2_BUCKET: ${{ secrets.B2_BUCKET }}
+          PG_CATALOG: ${{ secrets.PG_CATALOG }}
